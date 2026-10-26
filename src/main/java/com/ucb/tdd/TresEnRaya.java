@@ -3,6 +3,7 @@ package com.ucb.tdd;
 public class TresEnRaya {
 
     private char[][] tablero = new char[3][3];
+    private char ultimoJugador = '+';
 
     public void jugar(int x, int y) {
         if (x < 1 || x > 3) {
@@ -14,6 +15,14 @@ public class TresEnRaya {
         if (tablero[x - 1][y - 1] != '\0') {
             throw new RuntimeException("El lugar ya esta ocupado");
         }
-        tablero[x - 1][y - 1] = 'X';
+        ultimoJugador = siguienteJugador();
+        tablero[x - 1][y - 1] = ultimoJugador;
+    }
+
+    public char siguienteJugador() {
+        if (ultimoJugador == 'X') {
+            return '+';
+        }
+        return 'X';
     }
 }

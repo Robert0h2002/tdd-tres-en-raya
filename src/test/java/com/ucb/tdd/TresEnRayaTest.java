@@ -34,4 +34,24 @@ class TresEnRayaTest {
         RuntimeException e = assertThrows(RuntimeException.class, () -> juego.jugar(2, 1));
         assertEquals("El lugar ya esta ocupado", e.getMessage());
     }
+
+    // ---------- Requerimiento 2: saber que jugador juega despues ----------
+
+    @Test
+    void primerTurnoSiempreEsDeX() {
+        assertEquals('X', juego.siguienteJugador());
+    }
+
+    @Test
+    void siUltimoTurnoFueDeXEntoncesSigueMas() {
+        juego.jugar(1, 1); // X
+        assertEquals('+', juego.siguienteJugador());
+    }
+
+    @Test
+    void siUltimoTurnoFueDeMasEntoncesSigueX() {
+        juego.jugar(1, 1); // X
+        juego.jugar(1, 2); // +
+        assertEquals('X', juego.siguienteJugador());
+    }
 }
