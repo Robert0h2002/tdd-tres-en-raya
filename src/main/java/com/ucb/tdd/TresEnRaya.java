@@ -1,37 +1,23 @@
 package com.ucb.tdd;
 
+/**
+ * Kata Tres en Raya resuelta con TDD.
+ * Las coordenadas van de 1 a 3: x es el eje horizontal y y el eje vertical.
+ */
 public class TresEnRaya {
 
-    private char[][] tablero = new char[3][3];
+    private static final int TAMANIO = 3;
+    private static final char VACIO = '\0';
+
+    private final char[][] tablero = new char[TAMANIO][TAMANIO];
     private char ultimoJugador = '+';
 
     public String jugar(int x, int y) {
-        if (x < 1 || x > 3) {
-            throw new RuntimeException("X esta fuera del tablero");
-        }
-        if (y < 1 || y > 3) {
-            throw new RuntimeException("Y esta fuera del tablero");
-        }
-        if (tablero[x - 1][y - 1] != '\0') {
-            throw new RuntimeException("El lugar ya esta ocupado");
-        }
-        ultimoJugador = siguienteJugador();
-        tablero[x - 1][y - 1] = ultimoJugador;
+        verificarEje(x, "X");
+        verificarEje(y, "Y");
+        colocarPieza(x, y);
 
-        for (int i = 0; i < 3; i++) {
-            // linea horizontal (misma y)
-            if (tablero[0][i] == ultimoJugador && tablero[1][i] == ultimoJugador && tablero[2][i] == ultimoJugador) {
-                return ultimoJugador + " es el ganador";
-            }
-            // linea vertical (misma x)
-            if (tablero[i][0] == ultimoJugador && tablero[i][1] == ultimoJugador && tablero[i][2] == ultimoJugador) {
-                return ultimoJugador + " es el ganador";
-            }
-        }
-        if (tablero[0][0] == ultimoJugador && tablero[1][1] == ultimoJugador && tablero[2][2] == ultimoJugador) {
-            return ultimoJugador + " es el ganador";
-        }
-        if (tablero[0][2] == ultimoJugador && tablero[1][1] == ultimoJugador && tablero[2][0] == ultimoJugador) {
+        if (hayGanador()) {
             return ultimoJugador + " es el ganador";
         }
         return "No hay ganador";
@@ -42,5 +28,34 @@ public class TresEnRaya {
             return '+';
         }
         return 'X';
+    }
+
+    private void verificarEje(int valor, String eje) {
+        if (valor < 1 || valor > TAMANIO) {
+            throw new RuntimeException(eje + " esta fuera del tablero");
+        }
+    }
+
+    private void colocarPieza(int x, int y) {
+        if (tablero[x - 1][y - 1] != VACIO) {
+            throw new RuntimeException("El lugar ya esta ocupado");
+        }
+        ultimoJugador = siguienteJugador();
+        tablero[x - 1][y - 1] = ultimoJugador;
+    }
+
+    private boolean hayGanador() {
+        for (int i = 0; i < TAMANIO; i++) {
+            if (esLinea(tablero[0][i], tablero[1][i], tablero[2][i])      // horizontal
+                    || esLinea(tablero[i][0], tablero[i][1], tablero[i][2])) { // vertical
+                return true;
+            }
+        }
+        return esLinea(tablero[0][0], tablero[1][1], tablero[2][2])       // diagonal
+                || esLinea(tablero[0][2], tablero[1][1], tablero[2][0]);  // diagonal secundaria
+    }
+
+    private boolean esLinea(char a, char b, char c) {
+        return a == ultimoJugador && b == ultimoJugador && c == ultimoJugador;
     }
 }
