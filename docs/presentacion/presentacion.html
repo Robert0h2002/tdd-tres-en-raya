@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Pruebas TDD vs IA</title>
+<style>
+  @page { size: 1280px 720px; margin: 0; }
+  :root {
+    --ink: #1d2433; --muted: #5b6475; --line: #dfe3ea; --bg: #ffffff; --soft: #f4f6f9;
+    --me: #1f6feb; --me-soft: #e7f0ff; --ia: #b4501f; --ia-soft: #fdeee5;
+    --ok: #1a7f37; --bad: #c62828;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink);
+    font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif; }
+  .slide { width: 1280px; height: 720px; padding: 50px 72px 64px; position: relative;
+    page-break-after: always; overflow: hidden; display: flex; flex-direction: column; }
+  .slide:last-child { page-break-after: auto; }
+  h1 { font-size: 46px; margin: 0 0 12px; line-height: 1.15; }
+  h2 { font-size: 34px; margin: 0 0 6px; }
+  .kicker { font-size: 15px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; font-weight: 600; }
+  .sub { color: var(--muted); font-size: 19px; margin: 0 0 26px; }
+  p, li { font-size: 19px; line-height: 1.45; }
+  ul { margin: 0; padding-left: 22px; }
+  li { margin-bottom: 8px; }
+  .foot { position: absolute; bottom: 22px; left: 72px; right: 72px; display: flex; justify-content: space-between;
+    font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 10px; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; flex: 1; min-height: 0; }
+  .card { border: 1px solid var(--line); border-radius: 12px; padding: 20px 24px; background: #fff; }
+  .card h3 { margin: 0 0 10px; font-size: 20px; }
+  .me { border-top: 5px solid var(--me); }
+  .ia { border-top: 5px solid var(--ia); }
+  .tag { display: inline-block; font-size: 13px; font-weight: 700; padding: 3px 10px; border-radius: 999px; margin-bottom: 10px; }
+  .tag.me { background: var(--me-soft); color: var(--me); border: 0; }
+  .tag.ia { background: var(--ia-soft); color: var(--ia); border: 0; }
+  pre { background: #0f1724; color: #e6edf3; border-radius: 10px; padding: 14px 16px; font-size: 13.5px; line-height: 1.45;
+    margin: 8px 0 0; font-family: Consolas, "Cascadia Mono", monospace; white-space: pre; overflow: hidden; }
+  pre .c { color: #8b949e; } pre .k { color: #ff7b72; } pre .s { color: #a5d6ff; }
+  table { border-collapse: collapse; width: 100%; font-size: 17px; }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); }
+  table.compact td, table.compact th { padding: 6px 12px; }
+  th { color: var(--muted); font-size: 14px; text-transform: uppercase; letter-spacing: .06em; }
+  td.num { font-variant-numeric: tabular-nums; font-weight: 600; }
+  .y { color: var(--ok); font-weight: 700; } .n { color: var(--bad); font-weight: 700; }
+  .big { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-bottom: 22px; }
+  .stat { background: var(--soft); border-radius: 12px; padding: 16px 18px; }
+  .stat .lbl { font-size: 14px; color: var(--muted); }
+  .stat .val { font-size: 30px; font-weight: 700; margin-top: 4px; }
+  .stat .val span { font-size: 16px; color: var(--muted); font-weight: 600; }
+  .callout { background: var(--soft); border-left: 5px solid var(--ink); border-radius: 8px; padding: 14px 20px; font-size: 19px; margin-top: 18px; }
+  .cover { justify-content: center; background: linear-gradient(135deg, #0f1724 0%, #1d2a44 100%); color: #fff; }
+  .cover .kicker { color: #9fb3d1; }
+  .cover .sub { color: #c8d3e6; font-size: 22px; }
+  .cover .meta { margin-top: 40px; font-size: 18px; color: #c8d3e6; line-height: 1.7; }
+  .board { display: grid; grid-template-columns: repeat(3, 64px); gap: 6px; }
+  .board div { width: 64px; height: 64px; background: rgba(255,255,255,.08); border-radius: 8px; display:flex; align-items:center; justify-content:center; font-size: 34px; font-weight: 700; }
+  .small { font-size: 15px; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<!-- 1. Portada -->
+<section class="slide cover">
+  <div style="display:flex; justify-content:space-between; align-items:center;">
+    <div style="max-width: 820px;">
+      <div class="kicker">Gestión de Calidad de Sistemas · TDD y CI/CD</div>
+      <h1>Pruebas unitarias propias vs. pruebas generadas por IA</h1>
+      <p class="sub">Kata del Tres en Raya: comparación de alcance, calidad y capacidad de detectar errores</p>
+      <div class="meta">
+        Autor: Robert0h2002<br>
+        Repositorio: github.com/Robert0h2002/tdd-tres-en-raya<br>
+        Octubre 2026
+      </div>
+    </div>
+    <div class="board">
+      <div>X</div><div>+</div><div>X</div>
+      <div></div><div>X</div><div>+</div>
+      <div>+</div><div></div><div>X</div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. La kata -->
+<section class="slide">
+  <div class="kicker">Contexto</div>
+  <h2>La kata del Tres en Raya</h2>
+  <p class="sub">Tres requerimientos, cada uno con sus pruebas (presentación de TDD – CI/CD)</p>
+  <div style="display:grid; grid-template-columns: repeat(3,1fr); gap: 22px;">
+    <div class="card"><h3>R1 · Colocar pieza</h3><ul>
+      <li>Fuera del eje X → excepción</li><li>Fuera del eje Y → excepción</li><li>Lugar ocupado → excepción</li></ul></div>
+    <div class="card"><h3>R2 · Turnos</h3><ul>
+      <li>El primer turno es de <b>X</b></li><li>Después de X juega <b>+</b></li><li>Después de + juega <b>X</b></li></ul></div>
+    <div class="card"><h3>R3 · Ganador</h3><ul>
+      <li>Sin condición de victoria → no hay ganador</li><li>Línea horizontal completa</li><li>Línea vertical completa</li><li>Línea diagonal completa</li></ul></div>
+  </div>
+  <div class="callout">API implementada: <code>String jugar(int x, int y)</code> (coordenadas 1–3) y <code>char siguienteJugador()</code>.
+    Resultados: <code>"No hay ganador"</code>, <code>"X es el ganador"</code>, <code>"+ es el ganador"</code>.</div>
+  <div class="foot"><span>Kata Tres en Raya · TDD vs IA</span><span>2</span></div>
+</section>
+
+<!-- 3. Metodologia -->
+<section class="slide">
+  <div class="kicker">Cómo se hizo la comparación</div>
+  <h2>Metodología</h2>
+  <p class="sub">Las dos suites se ejecutan contra la misma implementación, sin modificar ninguna</p>
+  <div class="cols">
+    <div class="card me"><span class="tag me">Pruebas propias</span><h3>TDD: Red → Green → Refactor</h3><ul>
+      <li>Un commit por requerimiento (prueba + código mínimo)</li>
+      <li>Commit de refactor sin cambiar comportamiento</li>
+      <li>Java 17 + JUnit 5 + Maven + JaCoCo</li>
+      <li>CI con GitHub Actions en cada push / PR</li></ul></div>
+    <div class="card ia"><span class="tag ia">Pruebas de IA</span><h3>Generadas a partir de un prompt</h3><ul>
+      <li>El prompt incluye los 3 requerimientos y la API pública</li>
+      <li>La IA no vio el código fuente ni mis pruebas</li>
+      <li>El resultado se copió tal cual a <code>TresEnRayaIATest.java</code></li>
+      <li>Se ejecuta en el mismo pipeline de CI</li></ul></div>
+  </div>
+  <div class="callout">Además de contar pruebas y cobertura, se aplicaron <b>10 mutantes</b> (errores introducidos a propósito en el código) para medir qué suite detecta cada error.</div>
+  <div class="foot"><span>Kata Tres en Raya · TDD vs IA</span><span>3</span></div>
+</section>
+
+<!-- 4. Prompt -->
+<section class="slide">
+  <div class="kicker">Entregable</div>
+  <h2>El prompt usado con la IA</h2>
+  <p class="sub">Texto completo en <code>docs/prompt-ia.md</code> del repositorio</p>
+  <pre style="font-size:14px;">Actúa como un desarrollador Java con experiencia en TDD (Test Driven Development).
+
+Necesito que escribas SOLO las pruebas unitarias (todavía no el código) para la kata
+"Tres en Raya" (tic-tac-toe). Usa Java 17 y JUnit 5 (org.junit.jupiter).
+
+Requerimientos de la kata:  <span class="c">[R1, R2 y R3 copiados de la presentación, con sus pruebas]</span>
+
+La clase a probar se llama TresEnRaya, está en el paquete com.ucb.tdd y tiene esta API pública:
+  public String jugar(int x, int y);    <span class="c">// x, y de 1 a 3; RuntimeException si la jugada no es válida;</span>
+                                       <span class="c">// retorna "No hay ganador", "X es el ganador" o "+ es el ganador"</span>
+  public char siguienteJugador();       <span class="c">// 'X' o '+'</span>
+
+Condiciones:
+  - Una clase de prueba llamada TresEnRayaIATest en el paquete com.ucb.tdd.
+  - Nombres de métodos de prueba descriptivos en español.
+  - Sigue el patrón Arrange-Act-Assert.
+  - Cubre todos los escenarios de los requerimientos y agrega los casos borde
+    que consideres importantes.
+  - Devuelve solo el código Java de la clase de prueba, sin explicación.</pre>
+  <div class="foot"><span>Kata Tres en Raya · TDD vs IA</span><span>4</span></div>
+</section>
+
+<!-- 5. Numeros -->
+<section class="slide">
+  <div class="kicker">Resultados</div>
+  <h2>Comparación en números</h2>
+  <p class="sub">Las dos suites pasan al 100 % y cubren el 100 % del código, pero no detectan los mismos errores</p>
+  <div class="big">
+    <div class="stat"><div class="lbl">Casos de prueba</div><div class="val" style="color:var(--me)">13 <span>propias</span></div><div class="val" style="color:var(--ia)">36 <span>IA</span></div></div>
+    <div class="stat"><div class="lbl">Líneas de código de prueba</div><div class="val" style="color:var(--me)">118</div><div class="val" style="color:var(--ia)">448</div></div>
+    <div class="stat"><div class="lbl">Cobertura (líneas / ramas)</div><div class="val" style="color:var(--me)">100 %</div><div class="val" style="color:var(--ia)">100 %</div></div>
+    <div class="stat"><div class="lbl">Mutantes detectados</div><div class="val" style="color:var(--me)">8 <span>de 10</span></div><div class="val" style="color:var(--ia)">7 <span>de 10</span></div></div>
+  </div>
+  <table>
+    <tr><th>Aspecto</th><th>Propias</th><th>IA</th></tr>
+    <tr><td>Verifica el mensaje de la excepción</td><td class="y">Sí</td><td class="n">No</td></tr>
+    <tr><td>Prueba las 3 filas y las 3 columnas</td><td class="n">No (solo 1 de cada una)</td><td class="y">Sí</td></tr>
+    <tr><td>Prueba que el turno no avance tras una jugada inválida</td><td class="n">No</td><td class="y">Sí</td></tr>
+    <tr><td>Tablero lleno sin ganador / victoria en la última casilla</td><td class="n">No</td><td class="y">Sí</td></tr>
+  </table>
+  <div class="foot"><span>Kata Tres en Raya · TDD vs IA</span><span>5</span></div>
+</section>
+
+<!-- 6. Diferencia 1 -->
+<section class="slide">
+  <div class="kicker">Diferencia sustancial 1</div>
+  <h2>Cómo se verifican las excepciones</h2>
+  <p class="sub">La IA solo verifica el tipo; mis pruebas también verifican el mensaje</p>
+  <div class="cols">
+    <div class="card me"><span class="tag me">Propia</span>
+<pre><span class="k">@Test</span>
+<span class="k">void</span> cuandoPiezaFueraDelEjeXEntoncesLanzaExcepcion() {
+    RuntimeException e = assertThrows(
+        RuntimeException.<span class="k">class</span>, () -> juego.jugar(<span class="s">4</span>, <span class="s">2</span>));
+    assertEquals(<span class="s">"X esta fuera del tablero"</span>,
+                 e.getMessage());
+}</pre>
+    </div>
+    <div class="card ia"><span class="tag ia">IA</span>
+<pre><span class="k">@Test</span>
+<span class="k">void</span> cuandoLaPiezaEstaFueraDelEjeXPorEncima...() {
+    <span class="c">// Arrange</span>
+    <span class="k">int</span> x = <span class="s">4</span>;
+    <span class="k">int</span> y = <span class="s">1</span>;
+    <span class="c">// Act + Assert</span>
+    assertThrows(RuntimeException.<span class="k">class</span>,
+                 () -> juego.jugar(x, y));
+}</pre>
+    </div>
+  </div>
+  <div class="callout"><b>Consecuencia:</b> si la validación del límite está mal (mutante M1: <code>x &gt; 4</code>), Java lanza
+    <code>ArrayIndexOutOfBoundsException</code>, que <i>también</i> es una <code>RuntimeException</code>. Las 36 pruebas de la IA siguen en verde;
+    2 de mis pruebas fallan y detectan el error.</div>
+  <div class="foot"><span>Kata Tres en Raya · TDD vs IA</span><span>6</span></div>
+</section>
+
+<!-- 7. Diferencia 2 -->
+<section class="slide">
+  <div class="kicker">Diferencia sustancial 2</div>
+  <h2>Amplitud de las líneas ganadoras</h2>
+  <p class="sub">Yo escribí una prueba por tipo de línea; la IA probó cada fila, cada columna y cada jugador</p>
+  <div class="cols">
+    <div class="card me"><span class="tag me">Propias · 4 pruebas de victoria</span><ul>
+      <li>Horizontal: solo la fila <code>y = 1</code></li>
+      <li>Vertical: solo la columna <code>x = 1</code></li>
+      <li>Diagonal principal y diagonal secundaria</li>
+      <li>Alterna ganador X y ganador +</li></ul>
+      <p class="small" style="margin-top:14px;">Suficiente para hacer pasar el código en TDD (código mínimo), pero deja huecos.</p></div>
+    <div class="card ia"><span class="tag ia">IA · 12 pruebas de victoria + 6 de "no hay ganador"</span><ul>
+      <li>Las 3 filas y las 3 columnas para X</li>
+      <li>Una fila, una columna y una diagonal para +</li>
+      <li>Línea con fichas mezcladas, dos en línea sin la tercera</li>
+      <li>Tablero lleno sin ganador y victoria en la última casilla</li></ul></div>
+  </div>
+  <div class="callout"><b>Consecuencia:</b> si el ciclo solo revisa la primera fila/columna (mutante M6), <b>mis 13 pruebas pasan</b>
+    y 5 pruebas de la IA fallan. Es el error que mi suite no detecta.</div>
+  <div class="foot"><span>Kata Tres en Raya · TDD vs IA</span><span>7</span></div>
+</section>
+
+<!-- 8. Diferencia 3 -->
+<section class="slide">
+  <div class="kicker">Diferencia sustancial 3</div>
+  <h2>Casos borde y estado del juego</h2>
+  <p class="sub">La IA propuso escenarios que no estaban en los requerimientos</p>
+  <div class="cols">
+    <div class="card ia"><span class="tag ia">Solo en la IA</span><ul>
+      <li>Coordenadas negativas (<code>-1</code>, <code>-5</code>) y ambas fuera del tablero</li>
+      <li>Lugar ocupado por el mismo jugador vs. por el oponente</li>
+      <li><b>El turno no avanza</b> después de una jugada inválida</li>
+      <li>Consultar <code>siguienteJugador()</code> varias veces no cambia el turno</li>
+      <li>Las 4 esquinas son posiciones válidas</li></ul></div>
+    <div class="card me"><span class="tag me">Solo en las propias</span><ul>
+      <li>Mensaje exacto de cada excepción (eje X, eje Y, lugar ocupado)</li>
+      <li>Prueba de límites agrupada (coordenada 0 en X y en Y)</li></ul>
+      <p class="small" style="margin-top:14px;">Mis pruebas siguen exactamente la lista de la kata: más fieles al enunciado,
+      pero menos exploratorias.</p></div>
+  </div>
+  <div class="callout">Las pruebas de estado de la IA son las más fuertes: el mutante M8 (el turno avanza aunque la jugada sea inválida)
+    hace fallar <b>16 de 36</b> pruebas de la IA frente a 3 de 13 propias.</div>
+  <div class="foot"><span>Kata Tres en Raya · TDD vs IA</span><span>8</span></div>
+</section>
+
+<!-- 9. Diferencia 4 -->
+<section class="slide">
+  <div class="kicker">Diferencia sustancial 4</div>
+  <h2>Estilo, legibilidad y mantenimiento</h2>
+  <p class="sub">Más pruebas no siempre significa mejores pruebas</p>
+  <table>
+    <tr><th>Aspecto</th><th>Propias</th><th>IA</th></tr>
+    <tr><td>Estructura</td><td>Agrupadas por requerimiento, sin comentarios AAA</td><td>Comentarios <code>// Arrange / Act / Assert</code> explícitos</td></tr>
+    <tr><td>Nombres</td><td>Cortos, siguen el texto de la kata</td><td>Muy largos (hasta 70 caracteres)</td></tr>
+    <tr><td>Datos esperados</td><td>Literales en cada prueba</td><td>Constantes (<code>GANA_X</code>, <code>SIN_GANADOR</code>…)</td></tr>
+    <tr><td>Redundancia</td><td>Baja</td><td>Media: 3 pruebas casi iguales de "lugar ocupado" y 6 de "no hay ganador"</td></tr>
+    <tr><td>Una prueba = una idea</td><td>Sí (excepto la prueba de límites con 2 asserts)</td><td>No siempre: la prueba de esquinas hace 4 jugadas con 4 asserts</td></tr>
+    <tr><td>Ambigüedad</td><td>—</td><td>"Fila inferior/superior" asume una orientación del tablero que la kata no define</td></tr>
+    <tr><td>Proceso</td><td>Incremental, guiaron el diseño (TDD real)</td><td>Escritas de una sola vez después de conocer la API</td></tr>
+  </table>
+  <div class="foot"><span>Kata Tres en Raya · TDD vs IA</span><span>9</span></div>
+</section>
+
+<!-- 10. Mutantes -->
+<section class="slide">
+  <div class="kicker">Evidencia</div>
+  <h2>Prueba de mutantes: ¿quién detecta cada error?</h2>
+  <p class="sub">Se introdujo un error a la vez en <code>TresEnRaya.java</code> y se ejecutaron ambas suites (pruebas que fallan / total)</p>
+  <table class="compact" style="font-size:16px;">
+    <tr><th>Mutante (error introducido)</th><th>Propias</th><th>IA</th></tr>
+    <tr><td>M1 · Límite superior mal (<code>&gt; 4</code>)</td><td class="y">2/13 detecta</td><td class="n">0/36 no detecta</td></tr>
+    <tr><td>M2 · Límite inferior mal (<code>&lt; 0</code>)</td><td class="n">0/13 no detecta</td><td class="n">0/36 no detecta</td></tr>
+    <tr><td>M3 · No valida lugar ocupado</td><td class="y">1/13</td><td class="y">4/36</td></tr>
+    <tr><td>M4 · Mensaje de excepción cambiado</td><td class="y">2/13</td><td class="n">0/36 no detecta</td></tr>
+    <tr><td>M5 · Sin diagonal secundaria</td><td class="y">1/13</td><td class="y">2/36</td></tr>
+    <tr><td>M6 · Solo revisa la primera fila/columna</td><td class="n">0/13 no detecta</td><td class="y">5/36</td></tr>
+    <tr><td>M7 · Sin líneas verticales</td><td class="y">1/13</td><td class="y">4/36</td></tr>
+    <tr><td>M8 · El turno avanza aunque la jugada sea inválida</td><td class="y">3/13</td><td class="y">16/36</td></tr>
+    <tr><td>M9 · Mensaje de ganador fijo en "X"</td><td class="y">2/13</td><td class="y">3/36</td></tr>
+    <tr><td>M10 · Mensaje "sin ganador" cambiado</td><td class="y">1/13</td><td class="y">6/36</td></tr>
+    <tr><td><b>Total detectados</b></td><td class="num" style="color:var(--me)">8 / 10</td><td class="num" style="color:var(--ia)">7 / 10</td></tr>
+  </table>
+  <div class="foot"><span>Kata Tres en Raya · TDD vs IA</span><span>10</span></div>
+</section>
+
+<!-- 11. Fortalezas y debilidades -->
+<section class="slide">
+  <div class="kicker">Análisis</div>
+  <h2>Fortalezas y debilidades</h2>
+  <p class="sub">Cada suite cubre los puntos ciegos de la otra</p>
+  <div class="cols">
+    <div class="card me"><span class="tag me">Propias</span>
+      <p><b>Fortalezas</b></p><ul>
+        <li>Pocas pruebas, fáciles de leer y mantener</li>
+        <li>Verifican el contrato completo (tipo + mensaje)</li>
+        <li>Nacieron con el código: guiaron el diseño</li></ul>
+      <p><b>Debilidades</b></p><ul>
+        <li>Solo una fila y una columna probadas</li>
+        <li>No prueban el estado después de un error</li></ul></div>
+    <div class="card ia"><span class="tag ia">IA</span>
+      <p><b>Fortalezas</b></p><ul>
+        <li>Muy exhaustivas en combinaciones de victoria</li>
+        <li>Proponen casos borde y de estado nuevos</li>
+        <li>Generadas en segundos</li></ul>
+      <p><b>Debilidades</b></p><ul>
+        <li><code>assertThrows(RuntimeException)</code> demasiado genérico</li>
+        <li>Redundantes y verbosas (448 líneas)</li>
+        <li>Dependen de que el prompt describa bien la API</li></ul></div>
+  </div>
+  <div class="foot"><span>Kata Tres en Raya · TDD vs IA</span><span>11</span></div>
+</section>
+
+<!-- 12. Conclusiones -->
+<section class="slide">
+  <div class="kicker">Cierre</div>
+  <h2>Conclusiones</h2>
+  <p class="sub">&nbsp;</p>
+  <ul style="font-size:21px;">
+    <li><b>100 % de cobertura no garantiza buenas pruebas:</b> ambas suites cubren todo el código y aun así cada una deja pasar errores distintos.</li>
+    <li><b>La IA gana en amplitud</b> (más escenarios y casos borde) y <b>las pruebas propias en precisión</b> (verifican el mensaje y el contrato exacto).</li>
+    <li>Ninguna suite detectó el mutante M2: probar con <code>assertThrows(RuntimeException.class)</code> sin revisar el mensaje oculta errores de índice. Conviene usar una excepción propia o verificar el mensaje.</li>
+    <li>La IA no reemplaza el ciclo TDD: sus pruebas se escriben después de conocer la API, no guían el diseño.</li>
+    <li><b>Lo más útil es combinarlas:</b> escribir las pruebas con TDD y usar la IA como revisor para encontrar casos que faltan.</li>
+  </ul>
+  <div class="callout">Repositorio: <b>github.com/Robert0h2002/tdd-tres-en-raya</b> · Prompt: <code>docs/prompt-ia.md</code> · CI: GitHub Actions (<code>mvn clean test</code>)</div>
+  <div class="foot"><span>Kata Tres en Raya · TDD vs IA</span><span>12</span></div>
+</section>
+
+</body>
+</html>
