@@ -35,6 +35,17 @@ class TresEnRayaTest {
         assertEquals("El lugar ya esta ocupado", e.getMessage());
     }
 
+    @Test
+    void cuandoCoordenadaEsCeroEntoncesLanzaExcepcion() {
+        assertThrows(RuntimeException.class, () -> juego.jugar(0, 1));
+        assertThrows(RuntimeException.class, () -> juego.jugar(1, 0));
+    }
+
+    @Test
+    void cuandoPiezaEnEsquinaDelTableroNoLanzaExcepcion() {
+        assertDoesNotThrow(() -> juego.jugar(3, 3));
+    }
+
     // ---------- Requerimiento 2: saber que jugador juega despues ----------
 
     @Test
