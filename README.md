@@ -20,9 +20,8 @@ ejecutar las pruebas automáticamente con **CI en GitHub Actions**.
 src/main/java/com/ucb/tdd/TresEnRaya.java        -> programa
 src/test/java/com/ucb/tdd/TresEnRayaTest.java    -> mis pruebas unitarias (13)
 src/test/java/com/ucb/tdd/TresEnRayaIATest.java  -> pruebas generadas con IA (36)
-docs/prompt-ia.md                                -> prompt usado con la IA
-docs/Comparacion-Pruebas-TDD-vs-IA.pdf            -> presentacion comparativa
 .github/workflows/maven.yml                      -> pipeline de CI
+docs/mutantes.py                                 -> script para la prueba de mutantes
 ```
 
 ## Uso
