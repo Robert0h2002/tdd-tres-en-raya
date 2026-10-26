@@ -54,4 +54,54 @@ class TresEnRayaTest {
         juego.jugar(1, 2); // +
         assertEquals('X', juego.siguienteJugador());
     }
+
+    // ---------- Requerimiento 3: condicion de victoria ----------
+
+    @Test
+    void siNoSeCumpleCondicionDeVictoriaEntoncesNoHayGanador() {
+        String resultado = juego.jugar(1, 1);
+        assertEquals("No hay ganador", resultado);
+    }
+
+    @Test
+    void ganaCuandoLlenaUnaLineaHorizontal() {
+        juego.jugar(1, 1); // X
+        juego.jugar(1, 2); // +
+        juego.jugar(2, 1); // X
+        juego.jugar(2, 2); // +
+        String resultado = juego.jugar(3, 1); // X
+        assertEquals("X es el ganador", resultado);
+    }
+
+    @Test
+    void ganaCuandoLlenaUnaLineaVertical() {
+        juego.jugar(2, 1); // X
+        juego.jugar(1, 1); // +
+        juego.jugar(3, 1); // X
+        juego.jugar(1, 2); // +
+        juego.jugar(2, 2); // X
+        String resultado = juego.jugar(1, 3); // +
+        assertEquals("+ es el ganador", resultado);
+    }
+
+    @Test
+    void ganaCuandoLlenaLaDiagonalPrincipal() {
+        juego.jugar(1, 1); // X
+        juego.jugar(1, 2); // +
+        juego.jugar(2, 2); // X
+        juego.jugar(1, 3); // +
+        String resultado = juego.jugar(3, 3); // X
+        assertEquals("X es el ganador", resultado);
+    }
+
+    @Test
+    void ganaCuandoLlenaLaDiagonalSecundaria() {
+        juego.jugar(1, 1); // X
+        juego.jugar(1, 3); // +
+        juego.jugar(1, 2); // X
+        juego.jugar(2, 2); // +
+        juego.jugar(2, 3); // X
+        String resultado = juego.jugar(3, 1); // +
+        assertEquals("+ es el ganador", resultado);
+    }
 }
