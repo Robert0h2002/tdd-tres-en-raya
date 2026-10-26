@@ -27,19 +27,58 @@ docs/mutantes.py                                 -> script para la prueba de mut
 ## Uso
 
 ```
-juego.jugar(x, y)          // x, y entre 1 y 3. Retorna "No hay ganador" o "X es el ganador"
+juego.jugar(x, y)          // x, y entre 1 y 3. Retorna "No hay ganador", "X es el ganador" o "+ es el ganador"
 juego.siguienteJugador()   // 'X' o '+'
+```
+
+Si la jugada no es válida (fuera del tablero o lugar ocupado) se lanza una `RuntimeException`.
+
+## Clonar el repositorio
+
+```bash
+git clone https://github.com/Robert0h2002/tdd-tres-en-raya.git
+cd tdd-tres-en-raya
 ```
 
 ## Ejecutar las pruebas
 
 Requisitos: Java 17+ y Maven.
 
+Todas las pruebas (propias + IA, 49 en total):
+
 ```bash
 mvn clean test
 ```
 
+Solo mis pruebas (13):
+
+```bash
+mvn clean test -Dtest=TresEnRayaTest
+```
+
+Solo las pruebas generadas con IA (36):
+
+```bash
+mvn clean test -Dtest=TresEnRayaIATest
+```
+
 El reporte de cobertura (JaCoCo) queda en `target/site/jacoco/index.html`.
+
+## Prueba de mutantes
+
+El script `docs/mutantes.py` mete un error a la vez en `TresEnRaya.java`
+(10 mutantes, por ejemplo quitar la diagonal secundaria o validar mal los
+límites), corre las dos suites y muestra cuántas pruebas fallan en cada una.
+Sirve para ver qué suite detecta cada error. Al terminar deja el código original.
+
+Requisitos: Python 3 y Maven. Desde la raíz del repositorio:
+
+```bash
+python docs/mutantes.py .
+```
+
+Si una suite aparece como `n/a` significa que ninguna de sus pruebas falló, es
+decir, ese mutante **no** fue detectado.
 
 ## Historial TDD
 
