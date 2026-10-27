@@ -5,6 +5,12 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Pruebas unitarias PROPIAS de la kata Tres en Raya.
+ * Escritas a mano siguiendo TDD (Red, Green, Refactor): primero la prueba,
+ * luego el código mínimo para pasarla y al final el refactor.
+ * Las pruebas generadas con IA están en TresEnRayaIATest.
+ */
 class TresEnRayaTest {
 
     private TresEnRaya juego;

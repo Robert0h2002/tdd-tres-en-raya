@@ -5,6 +5,12 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Pruebas unitarias GENERADAS CON IA para la kata Tres en Raya.
+ * Se obtuvieron con el prompt entregado aparte (Prompt-pruebas-unitarias-IA.txt).
+ * El código de las pruebas se dejó tal como lo generó la IA; solo se agregó este comentario.
+ * Las pruebas propias (hechas con TDD) están en TresEnRayaTest.
+ */
 class TresEnRayaIATest {
 
     private static final String SIN_GANADOR = "No hay ganador";
